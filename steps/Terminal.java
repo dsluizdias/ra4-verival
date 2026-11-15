@@ -26,6 +26,7 @@ public class Terminal {
     private final Writer entrada;
     private final StringBuilder saida = new StringBuilder();
     private int lido = 0;
+    private boolean saidaAcabou = false;
     private String tela = "";
 
     public Terminal() throws IOException {
@@ -119,8 +120,10 @@ public class Terminal {
                     saida.notifyAll();
                 }
             }
-        } catch (IOException fimDaSaida) {
+        } catch (IOException saidaFechada) {
+        } finally {
             synchronized (saida) {
+                saidaAcabou = true;
                 saida.notifyAll();
             }
         }
@@ -131,8 +134,10 @@ public class Terminal {
         synchronized (saida) {
             while (!temTelaNova()) {
                 long falta = limite - System.currentTimeMillis();
-                garantir(falta > 0 && processo.isAlive(),
-                        "o programa não mostrou uma tela nova. saída até agora:\n" + saida.substring(lido));
+                garantir(!saidaAcabou,
+                        "o programa fechou sem mostrar uma tela. saída:\n" + saida.substring(lido));
+                garantir(falta > 0,
+                        "o programa demorou demais pra mostrar uma tela. saída até agora:\n" + saida.substring(lido));
                 try {
                     saida.wait(falta);
                 } catch (InterruptedException erro) {

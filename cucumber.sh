@@ -45,6 +45,13 @@ for dependencia in "${DEPENDENCIAS[@]}"; do
   fi
 done
 
+CAMINHOS=(features)
+for argumento in "$@"; do
+  case "$argumento" in
+    features/*) CAMINHOS=() ;;
+  esac
+done
+
 rm -rf "$CLASSES"
 javac -encoding UTF-8 -cp "$LIB/*" -d "$CLASSES" steps/*.java
-java -cp "$LIB/*:$CLASSES" io.cucumber.core.cli.Main --glue steps --plugin pretty features "$@"
+java -cp "$LIB/*:$CLASSES" io.cucumber.core.cli.Main --glue steps --plugin pretty "${CAMINHOS[@]}" "$@"
