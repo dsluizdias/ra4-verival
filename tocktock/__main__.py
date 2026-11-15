@@ -1,24 +1,18 @@
-print("TockTock - Início\n\n[N] Criar nova tarefa")
-input("> ")
-print("TockTock - Nova tarefa\n\n[1] Definir nome\n[2] Definir data\n[S] Salvar")
-input("> ")
-print("Digite o nome da tarefa:")
-nome = input("> ")
-print("TockTock - Nova tarefa\n\n[1] Definir nome\n[2] Definir data\n[S] Salvar")
-input("> ")
-print("Digite a data da tarefa:")
-data = input("> ")
-print("TockTock - Nova tarefa\n\n[1] Definir nome\n[2] Definir data\n[S] Salvar")
-input("> ")
-print(f"TockTock - Início\n\n1. {nome} | {data}\n\n[N] Criar nova tarefa")
-input("> ")
-print("TockTock - Tarefa\n\n[E] Editar")
-input("> ")
-print("TockTock - Editar tarefa\n\n[1] Definir nome\n[2] Definir data\n[S] Salvar")
-input("> ")
-print("Digite o nome da tarefa:")
-nome = input("> ")
-print("TockTock - Editar tarefa\n\n[1] Definir nome\n[2] Definir data\n[S] Salvar")
-input("> ")
-print(f"TockTock - Início\n\n1. {nome} | {data}\n\n[N] Criar nova tarefa")
-input("> ")
+from tocktock.app import App
+from tocktock.gerenciador import GerenciadorTarefas
+
+
+def main():
+    app = App(GerenciadorTarefas())
+    while True:
+        print(app.tela)
+        try:
+            entrada = input("> ")
+        except (EOFError, KeyboardInterrupt):
+            print()
+            return
+        app.receber(entrada)
+
+
+if __name__ == "__main__":
+    main()
